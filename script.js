@@ -113,8 +113,8 @@ function loadTable(){
             }},
             {title: 'Points', render: function(d, t, r){
                 return playersPrevData[r.ID]? nf.format((
-                    (r.T4 - playersPrevData[r.ID].T4) * 4 +
-                    (r.T5 - playersPrevData[r.ID].T5) * 5 +
+                    (r.T4 - playersPrevData[r.ID].T4) / 10 * 4 +
+                    (r.T5 - playersPrevData[r.ID].T5) / 20 * 5 +
                     (r.Deads - playersPrevData[r.ID].Deads) * 6.5
                 ) || 0) : 0
             }},
