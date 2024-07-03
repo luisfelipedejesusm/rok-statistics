@@ -17,9 +17,13 @@ firebase.initializeApp(firebaseConfig)
 
 var playersData = []
 var playersPrevData = []
+var names = {}
 var dt;
 
 var dbRef = firebase.database().ref()
+dbRef.child("names").get().then(snapshot => {
+    names = snapshot.val()
+})
 dbRef.child("players").get().then(snapshot => {
     playersData = Object.values(snapshot.val())
     dbRef.child("history").limitToFirst(1).get().then(snapshot => {
@@ -42,7 +46,7 @@ function updateData(t){
         // case 2:
         //     child = child.child("20240703")
         default:
-            child = child.child("20240628")
+            child = child.child("20240601")
             updateTagPeriod("Data from all KvK")
     }
     child.get().then(snapshot => {
@@ -60,7 +64,9 @@ function loadTable(){
         order: [[9, 'desc']],
         columns: [
             { title: "ID", data: 'ID' },
-            { title: 'Nick', data: 'Nick' },
+            { title: 'Nick', render: (d, t, r) => {
+                return names && names[r.ID] && names[r.ID].Nick || r.Nick
+            } },
             { title: 'Alliance', render: (d, t, r) => {
                 var m = r.Alliance.match(/\[(.*)\]/)
                 return m && m[1] || r.Alliance
