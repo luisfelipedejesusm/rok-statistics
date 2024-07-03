@@ -62,6 +62,11 @@ function loadTable(){
     // console.log(playersPrevData)
     dt = new DataTable('#players', {
         order: [[9, 'desc']],
+        layout: {
+            topStart: {
+                buttons: ['excel', 'pdf']
+            }
+        },
         columns: [
             { title: "ID", data: 'ID' },
             { title: 'Nick', render: (d, t, r) => {
