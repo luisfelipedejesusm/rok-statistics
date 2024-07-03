@@ -10,6 +10,30 @@
 </head>
 <body>
 
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Kingdom 3259 | <small><span id="period">Data from all KvK</span></small></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              
+            </ul>
+              <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Period of time
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#" onclick="updateData(0)">KvK 4</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="updateData(1)">Pass 7</a></li>
+                  <!-- <li><a class="dropdown-item" href="#" onclick="updateData(2)">Kings Land</a></li> -->
+                </ul>
+              </div>
+          </div>
+        </div>
+      </nav>
+
     <div class="container">
         <table id="players" class="table"></table>
     </div>

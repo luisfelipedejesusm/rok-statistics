@@ -17,6 +17,7 @@ firebase.initializeApp(firebaseConfig)
 
 var playersData = []
 var playersPrevData = []
+var dt;
 
 var dbRef = firebase.database().ref()
 dbRef.child("players").get().then(snapshot => {
@@ -27,16 +28,46 @@ dbRef.child("players").get().then(snapshot => {
     })
 })
 
+function updateTagPeriod(text){
+    document.getElementById("period").innerHTML = text
+}
+
+function updateData(t){
+    var child = dbRef.child("history");
+    switch(t){
+        case 1:
+            child = child.child("20240703")
+            updateTagPeriod("Data from pass 7 and forwards")
+            break
+        // case 2:
+        //     child = child.child("20240703")
+        default:
+            child = child.child("20240628")
+            updateTagPeriod("Data from all KvK")
+    }
+    child.get().then(snapshot => {
+        playersPrevData = snapshot.val()
+        dt.destroy()
+        loadTable()
+        
+    })
+}
+
 function loadTable(){
     var nf = Intl.NumberFormat("en-US")
-    new DataTable('#players', {
+    // console.log(playersPrevData)
+    dt = new DataTable('#players', {
         order: [[3, 'desc']],
         columns: [
             { title: "ID", data: 'ID' },
             { title: 'Nick', data: 'Nick' },
-            { title: 'Alliance', data: 'Alliance' },
+            { title: 'Alliance', render: (d, t, r) => {
+                var m = r.Alliance.match(/\[(.*)\]/)
+                return m && m[1] || r.Alliance
+            }},
             { title: 'Currrent Power', data: 'Power' },
             { title: 'Current KP', data: 'KP' },
+            // { title: 'Current Deads', data: 'Deads'},
             // { title: 'T1 kills', render: function(d, t, r){
             //     return nf.format((r.T1 || 0) / 0.2)
             // } },
@@ -46,25 +77,36 @@ function loadTable(){
             // { title: 'T3 kills', render: function(d, t, r){
             //     return nf.format((r.T3 || 0) / 4)
             // } },
-            { title: 'T4 kills', render: function(d, t, r){
-                return nf.format((r.T4 || 0) / 10)
-            } },
-            { title: 'T5 kills', render: function(d, t, r){
-                return nf.format((r.T5 || 0) / 20)
-            } },
+            // { title: 'T4 kills', render: function(d, t, r){
+            //     return nf.format((r.T4 || 0) / 10)
+            // } },
+            // { title: 'T5 kills', render: function(d, t, r){
+            //     return nf.format((r.T5 || 0) / 20)
+            // } },
             // { title: 'T2 kills', data: 'T2' },
             // { title: 'T3 kills', data: 'T3' },
             // { title: 'T4 kills', data: 'T4' },
             // { title: 'T5 kills', data: 'T5' },
             {title: 'KP Upgrade', render: function(d, t, r){
+                // console.log(playersPrevData[r.ID])
                 return playersPrevData[r.ID]? nf.format(r.KP - playersPrevData[r.ID].KP) : 0
             }},
-            {title: 'T4 Upgrade', render: function(d, t, r){
+            {title: 'T4 kills', render: function(d, t, r){
                 return playersPrevData[r.ID]? nf.format(((r.T4 - playersPrevData[r.ID].T4) || 0) / 10) : 0
             }},
-            {title: 'T5 Upgrade', render: function(d, t, r){
+            {title: 'T5 kills', render: function(d, t, r){
                 return playersPrevData[r.ID]? nf.format(((r.T5 - playersPrevData[r.ID].T5) || 0) / 20) : 0
-            }}
+            }},
+            {title: 'Deads', render: function(d, t, r){
+                return playersPrevData[r.ID]? nf.format((r.Deads - playersPrevData[r.ID].Deads) || 0) : 0
+            }},
+            {title: 'Points', render: function(d, t, r){
+                return playersPrevData[r.ID]? nf.format((
+                    (r.T4 - playersPrevData[r.ID].T4) * 4 +
+                    (r.T5 - playersPrevData[r.ID].T5) * 5 +
+                    (r.Deads - playersPrevData[r.ID].Deads) * 6.5
+                ) || 0) : 0
+            }},
         ],
         columnDefs: [
             {
