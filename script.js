@@ -57,7 +57,7 @@ function loadTable(){
     var nf = Intl.NumberFormat("en-US")
     // console.log(playersPrevData)
     dt = new DataTable('#players', {
-        order: [[3, 'desc']],
+        order: [[9, 'desc']],
         columns: [
             { title: "ID", data: 'ID' },
             { title: 'Nick', data: 'Nick' },
