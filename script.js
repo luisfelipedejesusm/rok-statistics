@@ -43,8 +43,10 @@ function updateData(t){
             child = child.child("20240703")
             updateTagPeriod("Data from pass 7 and forwards")
             break
-        // case 2:
-        //     child = child.child("20240703")
+        case 2:
+            child = child.child("20240706")
+            updateTagPeriod("Data from KL and forwards")
+            break
         default:
             child = child.child("20240601")
             updateTagPeriod("Data from all KvK")
@@ -61,7 +63,7 @@ function loadTable(){
     var nf = Intl.NumberFormat("en-US")
     // console.log(playersPrevData)
     dt = new DataTable('#players', {
-        order: [[9, 'desc']],
+        order: [[9, 'desc'], [4, 'desc']],
         layout: {
             topStart: {
                 buttons: ['excel', 'pdf']
